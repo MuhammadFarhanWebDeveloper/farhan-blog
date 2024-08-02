@@ -9,7 +9,7 @@ build: {
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:3000',
+        target: 'https://farhan-blog.vercel.app/',
         secure: false,
       },
     },
