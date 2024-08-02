@@ -16,6 +16,9 @@ app.use(cors({
 }));
 app.use(express.json());
 // The first middleware is used to access req.body
+app.get("/", (req, res)=>{
+  res.send("Server is working...")
+})
 app.use(cookieParser());
 app.use("/api/auth", auth);
 app.use("/api/post", post);
