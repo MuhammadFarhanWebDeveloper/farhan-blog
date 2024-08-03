@@ -12,7 +12,7 @@ const port = 3000;
 // MIDDLEWARES
 const allowedOrigins = [
   "http://localhost:5173",
-  "https://farhan-blog.vercel.app/",
+  "https://farhan-blog.vercel.app",
 ];
 
 // CORS configuration
