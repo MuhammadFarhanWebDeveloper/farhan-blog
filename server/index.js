@@ -11,7 +11,7 @@ const app = express();
 const port = 3000;
 // MIDDLEWARES
 app.use(cors({
-  origin:"*",
+  origin:"https://farhan-blog.vercel.app",
   credentials: true,
 }));
 app.use(express.json());
