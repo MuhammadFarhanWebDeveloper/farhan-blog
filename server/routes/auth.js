@@ -39,7 +39,7 @@ auth.post(
             secure: process.env.NODE_ENV === 'production',
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/',
-            domain: 'https://farhan-blog.vercel.app',
+            domain: 'farhan-blog.vercel.app',
             sameSite: 'None' 
           })
           .json({ success: true, user: rest });
