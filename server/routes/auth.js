@@ -192,7 +192,7 @@ auth.post(
           maxAge: 7 * 24 * 60 * 60 * 1000,
           path: '/',
           domain: 'https://farhan-blog.vercel.app',
-          sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
+          sameSite: 'none' // or 'Lax'/'Strict' depending on your needs
         })
         .json({ success: true, user: sendUser });
     } catch (error) {
