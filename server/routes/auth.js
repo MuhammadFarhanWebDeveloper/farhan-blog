@@ -36,7 +36,11 @@ auth.post(
         res
           .cookie("authtoken", authtoken, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: '/',
+            domain: 'https://farhan-blog.vercel.app',
+            sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
           })
           .json({ success: true, user: rest });
       } else {
@@ -59,7 +63,11 @@ auth.post(
         res
           .cookie("authtoken", authtoken, {
             httpOnly: true,
+            secure: process.env.NODE_ENV === 'production',
             maxAge: 7 * 24 * 60 * 60 * 1000,
+            path: '/',
+            domain: 'https://farhan-blog.vercel.app',
+            sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
           })
           .json({ success: true, user: rest });
       }
@@ -124,9 +132,13 @@ auth.post(
       } = newUser;
       const authtoken = jsonwebtoken.sign(data, process.env.JWT_SECRET);
       res
-        .cookie("authtoken", authtoken, {
+        .cookie("authtoken", authtoken,{
           httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
           maxAge: 7 * 24 * 60 * 60 * 1000,
+          path: '/',
+          domain: 'https://farhan-blog.vercel.app',
+          sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
         })
         .json({ success: true, user: sendUser });
     } catch (error) {
@@ -174,9 +186,13 @@ auth.post(
       const authtoken = jsonwebtoken.sign(data, process.env.JWT_SECRET);
       const { isAdmin, password: userPassword, ...sendUser } = user;
       res
-        .cookie("authtoken", authtoken, {
+        .cookie("authtoken", authtoken,{
           httpOnly: true,
+          secure: process.env.NODE_ENV === 'production',
           maxAge: 7 * 24 * 60 * 60 * 1000,
+          path: '/',
+          domain: 'https://farhan-blog.vercel.app',
+          sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
         })
         .json({ success: true, user: sendUser });
     } catch (error) {
