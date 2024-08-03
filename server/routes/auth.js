@@ -66,7 +66,7 @@ auth.post(
             secure: process.env.NODE_ENV === 'production',
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: '/',
-            domain: 'https://farhan-blog.vercel.app',
+            domain: 'farhan-blog.vercel.app',
             sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
           })
           .json({ success: true, user: rest });
@@ -137,7 +137,7 @@ auth.post(
           secure: process.env.NODE_ENV === 'production',
           maxAge: 7 * 24 * 60 * 60 * 1000,
           path: '/',
-          domain: 'https://farhan-blog.vercel.app',
+          domain: 'farhan-blog.vercel.app',
           sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
         })
         .json({ success: true, user: sendUser });
@@ -191,7 +191,7 @@ auth.post(
           secure: process.env.NODE_ENV === 'production',
           maxAge: 7 * 24 * 60 * 60 * 1000,
           path: '/',
-          domain: 'https://farhan-blog.vercel.app',
+          domain: 'farhan-blog.vercel.app',
           sameSite: 'None' // or 'Lax'/'Strict' depending on your needs
         })
         .json({ success: true, user: sendUser });
