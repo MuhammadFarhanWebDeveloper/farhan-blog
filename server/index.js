@@ -10,15 +10,29 @@ import cookieParser from "cookie-parser";
 const app = express();
 const port = 3000;
 // MIDDLEWARES
-app.use(cors({
-  origin:"https://farhan-blog.vercel.app",
-  credentials: true,
-}));
+const allowedOrigins = [
+  "http://localhost:5173",
+  "https://farhan-blog.vercel.app/",
+];
+
+// CORS configuration
+const corsOptions = {
+  origin: (origin, callback) => {
+    if (allowedOrigins.indexOf(origin) !== -1 || !origin) {
+      callback(null, true);
+    } else {
+      callback(new Error("Not allowed by CORS"));
+    }
+  },
+  credentials: true, // Allow cookies to be sent
+};
+
+app.use(cors(corsOptions));
 app.use(express.json());
 // The first middleware is used to access req.body
-app.get("/", (req, res)=>{
-  res.send("Server is working...")
-})
+app.get("/", (req, res) => {
+  res.send("Server is working...");
+});
 app.use(cookieParser());
 app.use("/api/auth", auth);
 app.use("/api/post", post);
