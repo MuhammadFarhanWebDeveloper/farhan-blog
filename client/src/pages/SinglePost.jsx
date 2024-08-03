@@ -15,7 +15,7 @@ function SinglePost() {
   const likePost = async () => {
     try {
       const response = await fetch(
-        `/api/post/like/${post._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/post/like/${post._id}`,
         { method: "POST", credentials: "include" }
       );
       const data = await response.json();
@@ -46,7 +46,7 @@ function SinglePost() {
     e.preventDefault();
     try {
       const response = await fetch(
-        `/api/comment/create/${post._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/comment/create/${post._id}`,
         {
           method: "POST",
           headers: {

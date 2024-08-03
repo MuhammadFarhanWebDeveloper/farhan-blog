@@ -29,7 +29,7 @@ function SignIn() {
     }
     try {
       dispetch(signInStart());
-      const response = await fetch(`/api/auth/signup`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/signup`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",

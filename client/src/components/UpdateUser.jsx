@@ -37,7 +37,7 @@ function UpdateUser() {
 
       setformError(null);
       const response = await fetch(
-        `/api/auth/update-user/${currentUser._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/auth/update-user/${currentUser._id}`,
         {
           method: "PUT",
           headers: { "Content-Type": "application/json" },

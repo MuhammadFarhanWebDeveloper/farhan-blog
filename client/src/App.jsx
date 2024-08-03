@@ -12,7 +12,7 @@ function App() {
   useEffect(() => {
     const getUserDetail = async () => {
       try {
-        const response = await fetch(`/api/auth/getone`, {
+        const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/getone`, {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

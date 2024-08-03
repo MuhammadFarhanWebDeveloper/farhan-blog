@@ -83,7 +83,7 @@ function CreatePost() {
     try {
       setFormError(null);
       setLoading(true);
-      const response = await fetch(`/api/post/create`, {
+      const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/create`, {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -112,7 +112,7 @@ function CreatePost() {
       setFormError(null);
       setLoading(true);
       const response = await fetch(
-        `/api/post/update/${post._id}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/post/update/${post._id}`,
         {
           method: "PUT",
           headers: {

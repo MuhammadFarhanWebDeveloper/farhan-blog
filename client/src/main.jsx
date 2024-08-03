@@ -19,7 +19,7 @@ import CreatePost from "./pages/CreatePost.jsx";
 
 const fetchSinglePost = async ({ params }) => {
   const response = await fetch(
-    `/api/post/getone/${params.slug}`
+    `${import.meta.env.VITE_BACKEND_URL}/api/post/getone/${params.slug}`
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
@@ -31,7 +31,7 @@ const fetchSinglePost = async ({ params }) => {
 };
 const fetchUserPosts = async () => {
   const response = await fetch(
-    `/api/post/get-user-posts`,
+    `${import.meta.env.VITE_BACKEND_URL}/api/post/get-user-posts`,
     { method: "POST", credentials: "include" }
   );
   if (!response.ok) {
