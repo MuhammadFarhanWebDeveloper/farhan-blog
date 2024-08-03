@@ -24,7 +24,7 @@ function PostsContainer() {
   const getPosts = async () => {
     setLoading(true);
     const response = await fetch(
-      `/api/post/getall?page=${page}`
+      `${import.meta.env.VITE_BACKEND_URL}/api/post/getall?page=${page}`
     );
     const data = await response.json();
     setLoading(false);
