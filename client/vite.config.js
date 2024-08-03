@@ -9,7 +9,7 @@ build: {
   server: {
     proxy: {
       '/api': {
-        target: 'https://farhan-blog-backend.vercel.app/',
+        target: 'https://farhan-blog-backend.vercel.app',
         secure: false,
       },
     },
