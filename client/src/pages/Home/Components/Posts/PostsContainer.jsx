@@ -42,7 +42,7 @@ function PostsContainer() {
   }, [page]);
   const deletePost = async (postid) => {
   try {
-    const response = await fetch(`http://localhost:5000/api/post/delete/${postid}`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/delete/${postid}`, {
       method: "DELETE",
       credentials: "include",
     });

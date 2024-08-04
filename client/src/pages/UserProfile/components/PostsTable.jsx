@@ -17,19 +17,34 @@ const formatDate = (dateString) => {
 };
 
 const PostTable = () => {
-  const { posts } = useLoaderData();
-  const handleEdit = (index) => {
-    console.log("Edit post at index:", index);
-    // Implement your edit functionality here
-  };
-
-  const handleDelete = (index) => {
-    console.log("Delete post at index:", index);
-    // Implement your delete functionality here
+  const { myposts } = useLoaderData();
+  const [posts, setposts] = useState(myposts);
+  const [error, seterror] = useState(null);
+  const handleDelete = async (postid) => {
+    seterror(null);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/post/delete/${postid}`,
+        {
+          method: "DELETE",
+          credentials: "include",
+        }
+      );
+      const data = await response.json();
+      if (!data.success) {
+        return seterror(data.message);
+      }
+      setposts((prevPosts) => prevPosts.filter((post) => post._id !== postid));
+    } catch (error) {
+      seterror(error.message);
+    }
   };
 
   return (
     <div className="max-w-full min-w-[500px] rounded border h-full mx-auto  px-4 ">
+      {error && (
+        <div className="text-center text-lg font-semibold">{error}</div>
+      )}
       <div className="overflow-x-auto">
         <table className="min-w-full  divide-gray-200  shadow-lg rounded-lg">
           <thead className="border-b">
@@ -64,7 +79,12 @@ const PostTable = () => {
                 </td>
                 <td className="px-6 py-4 whitespace-nowrap text-sm ">
                   <div className="w-full flex justify-between items-center">
-                    <div className="cursor-pointer">
+                    <div
+                      className="cursor-pointer"
+                      onClick={() => {
+                        handleDelete(post._id);
+                      }}
+                    >
                       <AiOutlineDelete size={20} />
                     </div>
                     <div className="cursor-pointer">
