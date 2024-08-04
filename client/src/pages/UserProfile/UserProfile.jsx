@@ -1,4 +1,3 @@
-import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import UpdateUser from "../../components/UpdateUser";
 import UserTable from "./components/PostsTable";

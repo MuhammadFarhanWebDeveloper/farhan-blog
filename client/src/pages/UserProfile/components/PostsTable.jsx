@@ -17,7 +17,7 @@ const formatDate = (dateString) => {
 };
 
 const PostTable = () => {
-  const { myposts } = useLoaderData();
+  const { posts:myposts } = useLoaderData();
   const [posts, setposts] = useState(myposts);
   const [error, seterror] = useState(null);
   const handleDelete = async (postid) => {
@@ -64,7 +64,7 @@ const PostTable = () => {
             </tr>
           </thead>
           <tbody className="">
-            {posts.map((post, index) => (
+            {posts?.map((post, index) => (
               <tr key={index} className="border-b relative">
                 <td className="px-6 py-4 whitespace-nowrap text-sm font-medium ">
                   {post?.title}
