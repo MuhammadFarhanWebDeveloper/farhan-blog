@@ -15,7 +15,7 @@ function Navbar() {
   const { currentUser } = useSelector((state) => state.user);
   const navigate = useNavigate();
   const logout = async () => {
-    const response = await fetch(`${VITE_BACKEND_URL}/api/auth/logout`, {
+    const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/auth/logout`, {
       method: "POST",
       credentials: "include",
     });
