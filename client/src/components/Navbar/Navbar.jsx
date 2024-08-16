@@ -2,12 +2,8 @@ import NavListItem from "./NavListItem";
 import { Link, useNavigate } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
 
-import { toggleTheme } from "../../redux/theme/themeSlice";
 import {
   MdDiscFull,
-  MdOutlineDarkMode,
-  MdOutlineSearch,
-  MdOutlineWbSunny,
 } from "react-icons/md";
 import { useEffect, useState } from "react";
 import { AiOutlineLogout, AiTwotoneIdcard } from "react-icons/ai";
