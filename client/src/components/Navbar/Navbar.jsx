@@ -52,17 +52,7 @@ function Navbar() {
       </div>
       {/* LOGO */}
 
-      {/* SEARCH-BAR */}
-      <form className={`flex gap-2 items-center rounded p-1`}>
-        <input
-          type="text"
-          className="outline-none bg-transparent "
-          placeholder="Search"
-        />
-        <MdOutlineSearch size={20} />
-      </form>
-      {/* SEARCH-BAR */}
-
+    
       {/* NAV-ITEMS */}
       <ul className="flex items-center gap-6">
         <NavListItem path={"/"} title={"Home"} />
@@ -80,18 +70,6 @@ function Navbar() {
 
       {/* CONTROLS */}
       <div className="flex items-center gap-5">
-        <div
-          className={`border cursor-pointer rounded-full p-2`}
-          onClick={() => {
-            dispetch(toggleTheme());
-          }}
-        >
-          {theme == "light" ? (
-            <MdOutlineDarkMode size={20} />
-          ) : (
-            <MdOutlineWbSunny size={20} />
-          )}
-        </div>
         <div>
           {currentUser ? (
             <>
