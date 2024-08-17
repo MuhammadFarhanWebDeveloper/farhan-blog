@@ -7,12 +7,9 @@ import Home from "./pages/Home/Home.jsx";
 import Login from "./pages/Login.jsx";
 import SignUp from "./pages/SignUp.jsx";
 import SinglePost from "./pages/SinglePost.jsx";
-import DashboardHome from "./pages/Dashboard/DashboardHome.jsx";
-import AddUser from "./pages/Dashboard/AddUser/AddUser.jsx";
-import MainLeft from "./pages/Dashboard/New folder/MainLeft.jsx";
-import { store, persistor } from "./redux/store.js";
+
+import { store,  } from "./redux/store.js";
 import { Provider } from "react-redux";
-import { PersistGate } from "redux-persist/integration/react";
 import UserProfile from "./pages/UserProfile/UserProfile.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
@@ -82,18 +79,7 @@ const router = createBrowserRouter([
         ),
         loader: fetchUserPosts,
       },
-      {
-        path: "dashboard",
-        element: (
-          <PrivateRoute>
-            <DashboardHome />
-          </PrivateRoute>
-        ),
-        children: [
-          { path: "", element: <MainLeft /> },
-          { path: "create-user", element: <AddUser /> },
-        ],
-      },
+
     ],
   },
 ]);
