@@ -34,10 +34,11 @@ function SinglePost() {
   }, []);
 
   useEffect(() => {
-    if (post.likes.includes(currentUser?._id)) {
-      setisUserLiked(true);
-    }
-  }, [post.likes, currentUser?._id]);
+     if (currentUser && post.likes.includes(currentUser._id)) {
+    setisUserLiked(true);
+  }
+
+  }, [post.likes]);
 
   const handleCommentInputValue = async (e) => {
     setcommentInputValue(e.target.value);
