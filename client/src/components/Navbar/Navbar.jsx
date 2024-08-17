@@ -70,7 +70,7 @@ function Navbar() {
           {currentUser ? (
             <>
               <div
-                className="cursor-pointer m-auto w-[40px] h-[40px] overfow-hidden rounded-full"
+                className="cursor-pointer m-auto float-right w-[40px] h-[40px] overfow-hidden rounded-full"
                 onClick={(event) => {
                   event.stopPropagation();
                   setIsUserMenuOpened(!isUserMenuOpened);
@@ -84,7 +84,7 @@ function Navbar() {
                 />
               </div>
               {isUserMenuOpened && (
-                <ul className="bg-gray-500 rounded p-1 py-3 absolute flex flex-col gap-2 mt-1 right-10">
+                <ul className="bg-gray-500 rounded p-1 py-3 absolute flex flex-col gap-2  mt-1 right-10">
                   <li className="hover:bg-gray-900 h-10 rounded">
                     <Link
                       className="px-5 text-center w-full  h-full flex justify-center items-center"
