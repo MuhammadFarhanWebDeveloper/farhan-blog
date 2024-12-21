@@ -77,8 +77,8 @@ function CreatePost() {
   };
   const handleFormCreate = async (e) => {
     e.preventDefault();
-    if (!formData.title || !formData.content) {
-      setFormError("Title and Content must not be empty");
+    if (!formData.title || !formData.content || !formData.image) {
+      setFormError("Title, Image and the body is required");
     }
     try {
       setFormError(null);
@@ -135,11 +135,7 @@ function CreatePost() {
     }
   };
 
-  useEffect(() => {
-    if (location.pathname.startsWith("/update-post/")) {
-      console.log(post);
-    }
-  }, []);
+
 
   return (
     <div className="">
