@@ -2,14 +2,19 @@
 @tailwind components;
 @tailwind utilities;
 
+.reset-default {
+  all: revert;
+}
 body {
   height: 100vh;
 }
 
-.ql-editor {
+.quill-custom {
   font-size: 1.06rem;
 }
-
+.ql-toolbar {
+  background-color: rgba(255, 255, 255, 0.801);
+}
 #blog-content h1 {
   @apply text-4xl font-bold text-gray-200 my-4;
 }
@@ -31,13 +36,69 @@ body {
 }
 
 #blog-content h6 {
-  @apply font-medium text-gray-200 my-2;
+  @apply text-base font-medium text-gray-200 my-2;
 }
 
 #blog-content p {
-  @apply text-[1.2rem] text-gray-200 my-2;
+  @apply  text-gray-200 my-4 text-lg leading-relaxed;
 }
 
 #blog-content a {
   @apply text-blue-600 hover:text-blue-800;
+}
+
+#blog-content ul {
+  @apply list-disc pl-5 my-4;
+}
+
+#blog-content ol {
+  @apply list-decimal pl-5 my-4;
+}
+
+#blog-content li {
+  @apply text-gray-200 my-2;
+}
+
+#blog-content blockquote {
+  @apply border-l-4 pl-4 text-gray-500 italic my-4;
+}
+
+#blog-content code {
+  @apply bg-gray-800 text-gray-100 px-1 py-0.5 rounded;
+}
+
+#blog-content pre {
+  @apply bg-gray-800 text-gray-100 p-4 rounded overflow-x-auto;
+}
+
+#blog-content img {
+  @apply max-w-full h-auto my-4;
+}
+
+#blog-content table {
+  @apply table-auto w-full text-gray-200 my-4;
+}
+
+#blog-content th {
+  @apply text-left p-2 bg-gray-700;
+}
+
+#blog-content td {
+  @apply p-2 bg-gray-800;
+}
+
+#blog-content hr {
+  @apply border-t-2 border-gray-700 my-4;
+}
+
+
+
+
+#nprogress .bar {
+  background: red; 
+
+}
+
+#nprogress .bar {
+  height: 4px;
 }

@@ -2,12 +2,13 @@ import React from "react";
 import { AiOutlineDelete } from "react-icons/ai";
 import { useSelector } from "react-redux";
 import { Link } from "react-router-dom";
+import StreamingImage from "../../../../components/StreamingImage";
 
 function Post({ post, deletePost }) {
   const { currentUser } = useSelector((state) => state.user);
 
   return (
-    <div className="relative lg:flex">
+    <div className="relative md:w-[90%] w-[100%] flex border  flex-col md:flex-row p-1 rounded">
       {post.userid == currentUser?._id && (
         <span
           onClick={() => {
@@ -18,53 +19,49 @@ function Post({ post, deletePost }) {
           <AiOutlineDelete size={24} />
         </span>
       )}
-      <div
-        className="h-48 lg:h-auto lg:w-48 flex-none bg-cover rounded-t lg:rounded-t-none lg:rounded-l text-center overflow-hidden bg-card-lft"
-        style={{
-          backgroundImage: `url(${
-            post.image || "https://tailwindcss.com/img/card-left.jpg"
-          })`,
-        }}
-        title="Woman holding a mug"
-      ></div>
-      <div className="border-r w-[500px] border-b border-l border-grey-light lg:border-l-0 lg:border-t lg:border-grey-light  rounded-b lg:rounded-b-none lg:rounded-r p-4 flex flex-col justify-between leading-normal">
+      <div className="flex justify-center h-[240px] w-full md:w-[300px] items-start">
+        <img
+          src={post.image}
+          width={165}
+          className=" w-full h-full rounded object-contain"
+          alt="Image about the post"
+        />
+      </div>
+      <div className="w-full md:w-[75%] rounded-b lg:rounded-b-none lg:rounded-r flex flex-col justify-between ">
         <div className="mb-5  p-2">
           <div className=" font-bold text-xl mb-2">{post.title}</div>
-          <div>
+          <div className="w-full break-words text-sm overflow-hidden">
             {post.description?.length > 150
               ? post.description.slice(0, 160) + " ..."
               : post.description}
           </div>
-
         </div>
         <div className="flex items-center">
-          <img
+          <StreamingImage
             className="w-10 h-10 rounded-full mr-4"
-            src={post.userimage || "noavatar.png"}
-            alt="Avatar of Jonathan Reinink"
+            src={post.user.image || "noavatar.png"}
+            alt="User avatar"
           />
           <div className="text-sm">
-            <p className="leading-none opacity-50">{post.username || ""}</p>
-            <p className="opacity-50">
+            <Link className="leading-none hover:font-semibold text-blue-700 underline cursor-pointer hover:opacity-1 opacity-50" to={`/author/${post.user._id}`}>{post.user.username || ""}</Link>
+            <p className="opacity-50 py-1">
               {new Date(post.createdAt).toLocaleDateString("en-US", {
                 year: "numeric",
                 month: "long",
                 day: "numeric",
               })}
             </p>{" "}
-            
           </div>
-          
         </div>
         <div className="mt-3 w-full flex rounded border border-pink-600">
-            <Link
-              to={`/posts/${post.slug}`}
-              className="w-full font-semibold text-center"
-              preventScrollReset={false}
-            >
-              Read
-            </Link>
-          </div>
+          <Link
+            to={`/posts/${post.slug}`}
+            className="w-full font-semibold text-center"
+            preventScrollReset={false}
+          >
+            Read
+          </Link>
+        </div>
       </div>
     </div>
   );

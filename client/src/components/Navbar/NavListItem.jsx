@@ -5,7 +5,7 @@ function NavListItem({ path, title }) {
   const location = useLocation();
   return (
     <li
-      className={`hover:border-b-2 ${
+      className={`hover:border-b-2  ${
         location.pathname == path && "border-b-2 border-blue-700"
       }`}
     >

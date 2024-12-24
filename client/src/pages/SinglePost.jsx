@@ -1,16 +1,27 @@
+import React, { useEffect, useState } from 'react';
 import { Link } from "react-router-dom";
-import { AiFillLike, AiOutlineLike } from "react-icons/ai";
-import CommentsSection from "./Home/Components/Posts/CommentSecttion/CommentsSection";
 import { useLoaderData } from "react-router-dom";
 import { useSelector } from "react-redux";
-import { useEffect, useState } from "react";
+import { AiFillLike, AiOutlineLike } from "react-icons/ai";
+import { FaRegComment } from "react-icons/fa";
+import CommentsSection from "./Home/Components/Posts/CommentSecttion/CommentsSection";
+import StreamingImage from '../components/StreamingImage';
+
 function SinglePost() {
-  const { post, likes, comments } = useLoaderData();
+  const { post, likes } = useLoaderData();
   const [numberOfLikes, setNumberOfLikes] = useState(likes);
-  const [isUserLiked, setisUserLiked] = useState(false);
-  const [commentInputValue, setcommentInputValue] = useState("");
-  const [postComments, setPostComments] = useState(comments);
+  const [isUserLiked, setIsUserLiked] = useState(false);
+  const [commentInputValue, setCommentInputValue] = useState("");
+  const [postComments, setPostComments] = useState(post?.comments);
   const { currentUser } = useSelector((state) => state.user);
+
+ 
+
+  useEffect(() => {
+    if (currentUser && post.likes.includes(currentUser._id)) {
+      setIsUserLiked(true);
+    }
+  }, [post.likes, currentUser]);
 
   const likePost = async () => {
     try {
@@ -20,29 +31,12 @@ function SinglePost() {
       );
       const data = await response.json();
       setNumberOfLikes(data.likes);
-      if (data.liked) {
-        setisUserLiked(true);
-      } else {
-        setisUserLiked(false);
-      }
+      setIsUserLiked(data.liked);
     } catch (error) {
       console.log(error.message);
     }
   };
-  useEffect(() => {
-    window.scrollTo(0, 0);
-  }, []);
 
-  useEffect(() => {
-     if (currentUser && post.likes.includes(currentUser._id)) {
-    setisUserLiked(true);
-  }
-
-  }, [post.likes]);
-
-  const handleCommentInputValue = async (e) => {
-    setcommentInputValue(e.target.value);
-  };
   const handleCommentSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -58,75 +52,91 @@ function SinglePost() {
         }
       );
       const data = await response.json();
-      if (!data.success) {
+      if (data.success) {
+        setPostComments([...postComments, data.comment]);
+        setCommentInputValue("");
+      } else {
         console.log(data.message);
       }
-      setPostComments([...postComments, data.comment]);
     } catch (error) {
       console.log(error.message);
     }
-    setcommentInputValue("");
   };
 
   return (
-    <div className="w-1/2 mx-auto">
-      <h1 className="text-4xl font-bold text-center my-5">{post.title}</h1>
-      <div className="h-[400px] overflow-hidden my-5">
-        <img
-          src={post.image || "https://tailwindcss.com/img/card-left.jpg"}
-          width={700}
-          height={100}
-          className="object-cover rounded "
-          alt="An Image related to this post"
+    <div className="max-w-3xl mx-auto px-4 py-8">
+      <h1 className="text-4xl font-bold text-center mb-8">{post.title}</h1>
+      <div className="aspect-w-16 aspect-h-9 min-h-[400px] border mb-8 rounded-lg overflow-hidden">
+        <StreamingImage
+          src={post.image}
+          alt="An image related to this post"
+          className="object-cover w-full h-full"
         />
       </div>
-      <div className="px-2" id="blog-content" dangerouslySetInnerHTML={{ __html: post.content }} />{" "}
-      <div className="font-semibold opacity-50">Muhammad Farhan</div>
+      <div id='blog-content'>
+
+      <div id='' className=" max-w-none mb-8" dangerouslySetInnerHTML={{ __html: post.content }} />
+      </div>
+      <div className="flex items-center justify-between mb-8">
+        <div className="flex items-center space-x-4">
+          <img
+            src={post.user.image || "/noavatar.png"}
+            alt="Author avatar"
+            className="w-12 h-12 rounded-full"
+          />
+          <div>
+            <Link to={`/author/${post.user._id}`} className="font-semibold underline text-blue-700 ">{post.user.username}</Link>
+            <p className="text-sm text-gray-500">Posted on {new Date(post.createdAt).toLocaleDateString()}</p>
+          </div>
+        </div>
+        <div className="flex items-center space-x-4">
+          <button
+            onClick={likePost}
+            className={`flex items-center space-x-1 px-3 py-1 rounded-full ${
+              isUserLiked ? 'bg-blue-100 text-blue-600' : 'bg-gray-100 text-gray-600'
+            } transition-colors duration-200`}
+            disabled={!currentUser}
+          >
+            {isUserLiked ? (
+              <AiFillLike className="w-5 h-5" />
+            ) : (
+              <AiOutlineLike className="w-5 h-5" />
+            )}
+            <span>{numberOfLikes}</span>
+          </button>
+          <div className="flex items-center space-x-1 px-3 py-1 bg-gray-100 text-gray-600 rounded-full">
+            <FaRegComment className="w-5 h-5" />
+            <span>{postComments.length}</span>
+          </div>
+        </div>
+      </div>
       {currentUser ? (
-        <>
-          <div className="border-t my-5 flex items-center ">
-            <div className="flex gap-1 items-center p-2  py-1 my-2 rounded-full border">
-              {" "}
-              <div>{numberOfLikes}</div>
-              {isUserLiked ? (
-                <AiFillLike
-                  className="cursor-pointer"
-                  onClick={likePost}
-                  size={24}
-                />
-              ) : (
-                <AiOutlineLike
-                  className="cursor-pointer"
-                  onClick={likePost}
-                  size={24}
-                />
-              )}
-            </div>
+        <form onSubmit={handleCommentSubmit} className="mb-8">
+          <div className="flex items-center space-x-4">
+            <img
+              src={currentUser.image || "../../noavatar.png"}
+              alt="User avatar"
+              className="w-10 h-10 rounded-full"
+            />
+            <input
+              type="text"
+              placeholder="Add a comment..."
+              className="flex-grow px-4 py-2 border border-gray-300 text-black rounded-full focus:outline-none focus:ring-2 focus:ring-blue-500"
+              value={commentInputValue}
+              onChange={(e) => setCommentInputValue(e.target.value)}
+            />
+            <button
+              type="submit"
+              className="px-4 py-2 bg-blue-600 text-white rounded-full hover:bg-blue-700 transition-colors duration-200"
+            >
+              Post
+            </button>
           </div>
-          <div className="flex items-center">
-            <div>
-              <img
-                src={currentUser.image || "../../noavatar.png"}
-                className="rounded-full border"
-                width={40}
-                alt="Default User image"
-              />
-            </div>
-            <form onSubmit={handleCommentSubmit} className="w-1/2">
-              <input
-                type="text"
-                placeholder="Comment..."
-                className=" mx-2 bg-transparent border-b w-full outline-none"
-                value={commentInputValue}
-                onChange={handleCommentInputValue}
-              />
-            </form>
-          </div>
-        </>
+        </form>
       ) : (
-        <div>
-          <Link to={"/login"} className="text-blue-700 underline">
-            Login to comment or like post
+        <div className="text-center mb-8">
+          <Link to="/login" className="text-blue-600 hover:underline">
+            Log in to like or comment on this post
           </Link>
         </div>
       )}
@@ -139,3 +149,4 @@ function SinglePost() {
 }
 
 export default SinglePost;
+

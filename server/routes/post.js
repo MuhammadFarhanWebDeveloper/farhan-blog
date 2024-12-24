@@ -14,6 +14,9 @@ post.post(
     body("content", "Content must be greater than 15 characters").isLength({
       min: 15,
     }),
+    body("description", "Description must be greater than 15 characters").isLength({
+      min:15
+    })
   ],
   async (req, res) => {
     const errors = validationResult(req);
@@ -23,10 +26,6 @@ post.post(
     try {
       const { title, image, content, description } = req.body;
       const userid = req.user;
-      const PostUser = await User.findById(userid);
-      const username = PostUser.username;
-      const useremail = PostUser.useremail;
-      const userimage = PostUser.image;
       const slug = title
         .replaceAll(" ", "-")
         .toLowerCase()
@@ -45,12 +44,12 @@ post.post(
         image,
         slug,
         content,
-        userid,
-        useremail,
-        username,
-        userimage,
+        user:userid,
         description,
       });
+
+      
+      
       res.status(200).json({ success: true, post: newPost });
     } catch (error) {
       console.log(error.message);
@@ -123,14 +122,12 @@ post.delete("/delete/:id", isUserLoggedIn, async (req, res) => {
         .status(404)
         .json({ success: false, message: "Post not found" });
     }
-    if (!isUserAdmin && userid != post.userid) {
+    if (!isUserAdmin && userid != post.user) {
       return res.status(401).json({
         success: false,
         message: "You have no permission to delete this post",
       });
     }
-    console.log(`IsAdmin ${isUserAdmin}`);
-    console.log(`Has Own ${userid == post.userid}`);
     const deletepost = await Post.findByIdAndDelete(post.id);
     res.status(200).json({ success: true, deletedpost: deletepost });
   } catch (error) {}
@@ -138,27 +135,49 @@ post.delete("/delete/:id", isUserLoggedIn, async (req, res) => {
 
 post.get("/getall", async (req, res) => {
   try {
-    const page = req.query.page || 1;
-    const POSTS_PER_PAGE = 4;
-    const count = await Post.countDocuments({});
-    const posts = await Post.find()
-      .sort({ createdAt: -1 })
-      .limit(POSTS_PER_PAGE)
-      .skip(POSTS_PER_PAGE * (page - 1));
-    posts.reverse();
-    res.json({ success: true, posts, count });
+    
+    
+    const author = req.query.author; 
+
+
+    const filter = {};
+    if (author) {
+      filter.user = author;
+    }
+
+    
+
+    
+    const posts = await Post.find(filter)
+      .sort({ createdAt: -1 }).populate({
+      path: 'user', 
+      select: 'username useremail description image', 
+    })
+
+    posts.reverse(); 
+
+    res.json({ success: true, posts});
   } catch (error) {
     console.log(error.message);
-    res
-      .status(500)
-      .json({ success: false, message: "Unexpected error occured" });
+    res.status(500).json({ success: false, message: "Unexpected error occurred" });
   }
 });
+
 
 post.get("/getone/:slug", async (req, res) => {
   try {
     const postslug = req.params.slug;
-    const post = await Post.findOne({ slug: postslug });
+    const post = await Post.findOne({ slug: postslug }).populate({
+      path: 'user', 
+      select: 'username useremail description image', 
+    }).populate({
+      path:"comments",
+      select:"comment",
+      populate:{
+        path:"user",
+        select:"username image useremail",
+      }
+    })
     if (!post) {
       return res
         .status(404)
@@ -215,16 +234,5 @@ post.post("/like/:id", isUserLoggedIn, async (req, res) => {
       .json({ success: false, message: "Unexpected error occured" });
   }
 });
-post.post("/get-user-posts", isUserLoggedIn, async (req, res) => {
-  try {
-    const userid = req.user;
-    const posts = await Post.find({ userid });
-    res.status(200).json({ success: true, posts });
-  } catch (error) {
-    console.log(error.message);
-    res
-      .status(500)
-      .json({ success: false, message: "Unexpected error occured" });
-  }
-});
+
 export default post;

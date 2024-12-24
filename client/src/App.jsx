@@ -1,14 +1,14 @@
 import Navbar from "./components/Navbar/Navbar";
 import AppWrapper from "./AppWrapper";
-import ThemeProvider from "./components/ThemeProvider";
 import { useEffect, useState } from "react";
-import { signInSuccess } from "./redux/user/userSlice";
+import { signInSuccess  } from "./redux/user/userSlice";
 import { useDispatch } from "react-redux";
+import TopLoadingBar from "./components/TopLoadingBar";
+import LoadingScreen from "./components/LoadingScreen";
 
 function App() {
-  const [loading, setloading] = useState(true);
-
   const dispetch = useDispatch();
+  const [loading, setloading] = useState(true)
   useEffect(() => {
     const getUserDetail = async () => {
       try {
@@ -25,23 +25,25 @@ function App() {
           return;
         }
         dispetch(signInSuccess(data.user));
-        setloading(false);
       } catch (error) {
-        setloading(false);
         console.log(error);
+      }finally{
+        setloading(false)
       }
     };
     getUserDetail();
   }, []);
 
-  if (loading) {
-    return <div>Loading...</div>;
+  if(loading){
+    return <LoadingScreen />
   }
+  
   return (
-    <ThemeProvider>
-      <Navbar />
+    <>
+    <TopLoadingBar />
+      <Navbar  />
       <AppWrapper />
-    </ThemeProvider>
+    </>
   );
 }
 

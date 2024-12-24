@@ -57,8 +57,8 @@ function SignIn() {
   };
 
   return (
-    <div className="w-full h-screen flex justify-center items-center bg-black">
-      <div className="bg-gray-900 rounded w-1/4 h-fit p-5 py-10 flex flex-col gap-2">
+    <div className="w-full h-screen flex justify-center items-start md:items-center ">
+      <div className="bg-gray-900 rounded md:w-1/4 w-full h-fit p-5 py-10 flex flex-col gap-2">
         <form onSubmit={controlForm} className="flex flex-col gap-5">
           <h1 className="text-center text-3xl font-bold">Sign up</h1>
           <input

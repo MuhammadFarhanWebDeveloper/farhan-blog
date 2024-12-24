@@ -1,45 +1,36 @@
 import React, { useEffect, useState } from "react";
 import Post from "./Post";
 
-function PostsContainer() {
-  const [page, setPage] = useState(1);
+function PostsContainer({userid=null}) {
   const [Loading, setLoading] = useState(false);
   const [posts, setposts] = useState([]);
-  const [user, setuser] = useState(null);
-  const [error, seterror] = useState(null);
-  const [numberOfPosts, setnumberOfPosts] = useState(0);
-  const POSTS_PER_PAGE = 4;
-
-  const next = (e) => {
-    // e.preventDefault()
-
-    setPage(page + 1);
-  };
-  const prev = (e) => {
-    // e.preventDefault()
-    setPage(page && page - 1);
-  };
-  const hasPrev = POSTS_PER_PAGE * (page - 1) > 0;
-  const hasNext = POSTS_PER_PAGE * (page - 1) + POSTS_PER_PAGE < numberOfPosts;
+  const [error, seterror] = useState(null)
   const getPosts = async () => {
     setLoading(true);
-    const response = await fetch(
-      `${import.meta.env.VITE_BACKEND_URL}/api/post/getall?page=${page}`
-    );
+    try {
+      
+    
+    const url = new URL(`${import.meta.env.VITE_BACKEND_URL}/api/post/getall`)
+    if(userid){
+      url.searchParams.append("author", userid)
+    }
+    const response = await fetch(url);
     const data = await response.json();
-    setLoading(false);
     if (!data.success) {
       seterror(data.message || "Could not fetch posts");
     } else {
       seterror(null);
       setposts(data.posts);
-      setnumberOfPosts(data.count);
-      setuser(data.user);
     }
+  } catch (error) {
+      seterror("Oops! Something went wrong")
+  } finally {
+    setLoading(false)
+  }
   };
   useEffect(() => {
     getPosts();
-  }, [page]);
+  }, []);
   const deletePost = async (postid) => {
   try {
     const response = await fetch(`${import.meta.env.VITE_BACKEND_URL}/api/post/delete/${postid}`, {
@@ -62,32 +53,17 @@ function PostsContainer() {
         {/* Components */}
 
         {Loading ? (
-          <p className="text-2xl text-center font-bold">Loading...</p>
+          <div className="text-2xl text-center font-bold">
+            <img src="/loading.gif" alt="Loading..." width={25} />
+          </div>
         ) : (
           posts.map((post, index) => {
             return <Post key={index} deletePost={deletePost} post={post} />;
           })
         )}
+        {error && <div className="text-2xl text-center w-full h-full text-red-600 fond-bold">Oops! Something went wrong</div>}
       </div>
-      <div className="w-full ">
-        <button
-          className={`p-1 rounded border w-[75px] font-semibold border-red-500 float-left ${
-            !hasPrev && "hidden"
-          }`}
-          onClick={prev}
-        >
-          Previous
-        </button>
-
-        <button
-          className={`p-1 rounded border w-[75px] font-semibold border-red-500 float-right ${
-            !hasNext && "hidden"
-          }`}
-          onClick={next}
-        >
-          Next
-        </button>
-      </div>
+      
     </div>
   );
 }

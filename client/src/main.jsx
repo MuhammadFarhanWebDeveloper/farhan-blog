@@ -1,4 +1,6 @@
 import React from "react";
+import PostsTable from "./pages/UserProfile/components/PostsTable.jsx";
+
 import ReactDOM from "react-dom/client";
 import App from "./App.jsx";
 import "./index.css";
@@ -13,6 +15,10 @@ import { Provider } from "react-redux";
 import UserProfile from "./pages/UserProfile/UserProfile.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import CreatePost from "./pages/CreatePost.jsx";
+import UpdateUser from "./components/UpdateUser.jsx";
+import Author from "./pages/Author.jsx";
+import NotFound from "./pages/NotFound.jsx";
+import ErrorPage from "./pages/ErrorPage.jsx";
 
 const fetchSinglePost = async ({ params }) => {
   const response = await fetch(
@@ -26,24 +32,24 @@ const fetchSinglePost = async ({ params }) => {
 
   return rest;
 };
-const fetchUserPosts = async () => {
+const fetchUser = async ({params}) => {
   const response = await fetch(
-    `${import.meta.env.VITE_BACKEND_URL}/api/post/get-user-posts`,
-    { method: "POST", credentials: "include" }
+    `${import.meta.env.VITE_BACKEND_URL}/api/auth/getuserbyid/${params.userid}`,
     
   );
   if (!response.ok) {
     throw new Error("Network response was not ok");
   }
   const data = await response.json();
-  const { success, ...rest } = data;
 
-  return rest;
+  
+  return data?.user;
 };
 const router = createBrowserRouter([
   {
     path: "/",
     element: <App />,
+    errorElement: <ErrorPage />, 
     children: [
       { path: "", element: <Home /> },
       { path: "login", element: <Login /> },
@@ -77,15 +83,21 @@ const router = createBrowserRouter([
             <UserProfile />
           </PrivateRoute>
         ),
-        loader: fetchUserPosts,
+        children:[
+          {path:"", element:<div className=""><PostsTable /></div>},
+          {path:"update-user-info", element:<div><UpdateUser /></div>}
+        
+        ],
+        
       },
-
+      {path:"author/:userid", element:<Author />, loader:fetchUser},
+      {path:"*", element:<NotFound />}
     ],
   },
 ]);
 ReactDOM.createRoot(document.getElementById("root")).render(
   <Provider store={store}>
-    <div>
+    <div className="bg-[rgb(16,23,42)] text-gray-200"> 
       <RouterProvider router={router} />
     </div>
   </Provider>

@@ -17,15 +17,15 @@ function UpdateUser() {
   const [succeeded, setsucceeded] = useState(null);
   const [updateForm, setUpdateForm] = useState({
     username: currentUser.username,
-    useremail: currentUser.useremail,
     image: currentUser.image,
+    description:currentUser.description
   });
   const [progress, setProgress] = useState(0);
   const [imageUploadError, setimageUploadError] = useState(null);
   const [formError, setformError] = useState(null);
   const imageInputRef = useRef();
   const dispetch = useDispatch();
-  const changeUserNameOrEmail = async (e) => {
+  const changeInputValue = async (e) => {
     setsucceeded(null);
     setUpdateForm({ ...updateForm, [e.target.name]: e.target.value });
   };
@@ -101,7 +101,7 @@ function UpdateUser() {
     );
   };
   return (
-    <div className="m-2 w-1/2 mx-auto rounded border min-h-1.5 ">
+    <div className="m-2 w-1/2 mx-auto rounded  min-h-1.5 ">
       <h1 className="text-center text-2xl font-bold">Update User</h1>
 
       <form
@@ -150,28 +150,29 @@ function UpdateUser() {
           hidden
         />
 
-        <div className="w-full p-3">
+        <div className="w-full  p-3">
           <input
             type="text"
             name="username"
             id="username"
             placeholder="Username"
             value={updateForm.username}
-            onChange={changeUserNameOrEmail}
-            className="bg-gray-900 w-full p-2 rounded"
+            onChange={changeInputValue}
+            className="bg-gray-700 w-full p-2 rounded"
           />
         </div>
-        <div className="w-full p-3">
-          <input
-            type="email"
-            name="useremail"
-            id="useremail"
-            placeholder="Email"
-            value={updateForm.useremail}
-            onChange={changeUserNameOrEmail}
-            className="bg-gray-900 w-full p-2 rounded"
+        <div className="w-full  p-3">
+          <textarea
+            type="text"
+            name="description"
+            id="description"
+            placeholder="About You"
+            value={updateForm.description}
+            onChange={changeInputValue}
+            className="bg-gray-700 w-full p-2 rounded"
           />
         </div>
+     
         <div className="w-full p-3 my-3">
           <button className="bg-blue-900 w-full p-2 rounded">Update</button>
         </div>

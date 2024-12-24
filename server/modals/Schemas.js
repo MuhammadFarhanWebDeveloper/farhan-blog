@@ -8,6 +8,10 @@ const UserSchema = new mongoose.Schema(
       max: 15,
       min: 4,
     },
+    description: {
+      type: String,
+      default: "",
+    },
     useremail: {
       type: String,
       unique: true,
@@ -26,6 +30,8 @@ const UserSchema = new mongoose.Schema(
       type: Boolean,
       default: false,
     },
+    posts: [{ type: mongoose.Schema.Types.ObjectId, ref: "posts", default:[]}],
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comments", default:[] }],
   },
   { timestamps: true }
 );
@@ -57,34 +63,33 @@ const PostSchema = new mongoose.Schema(
       required: true,
       unique: true,
     },
-    userid: {
+    user: {
       type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
       required: true,
-    },
-    userimage: {
-      type: String,
-    },
-    username: {
-      type: String,
-    },
-    useremail: {
-      type: String,
     },
     likes: {
       type: [mongoose.Schema.Types.ObjectId],
       default: [],
     },
+    comments: [{ type: mongoose.Schema.Types.ObjectId, ref: "comments",default:[] }],
   },
   { timestamps: true }
 );
 
 const CommentSchema = new mongoose.Schema(
   {
-    postid: { type: mongoose.Schema.Types.ObjectId, required: true },
-    userid: { type: mongoose.Schema.Types.ObjectId, required: true },
+    post: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "posts",
+      required: true,
+    },
+    user: {
+      type: mongoose.Schema.Types.ObjectId,
+      ref: "users",
+      required: true,
+    },
     comment: { type: String, required: true },
-    username: { type: String, required: true },
-    image: { type: String },
   },
   { timestamps: true }
 );

@@ -1,7 +1,7 @@
-// src/components/PostTable.js
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { AiOutlineDelete, AiOutlineEdit } from "react-icons/ai";
-import { Link, useLoaderData } from "react-router-dom";
+import { useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 
 const formatDate = (dateString) => {
   const options = {
@@ -16,15 +16,36 @@ const formatDate = (dateString) => {
   return new Date(dateString).toLocaleDateString(undefined, options);
 };
 
-const PostTable = () => {
-  const { posts:myposts } = useLoaderData();
-  const [posts, setposts] = useState(myposts);
-  const [error, seterror] = useState(null);
-  const handleDelete = async (postid) => {
-    seterror(null);
+const PostCards = () => {
+  const [posts, setPosts] = useState([]);
+  const [error, setError] = useState(null);
+
+  const userid = useSelector((state)=> state.user.currentUser?._id)
+useEffect(() => {
+  const fetchPosts = async () => {
     try {
       const response = await fetch(
-        `${import.meta.env.VITE_BACKEND_URL}/api/post/delete/${postid}`,
+        `${import.meta.env.VITE_BACKEND_URL}/api/post/getall?author=${userid}`,
+      );
+      const data = await response.json();
+      if (!data.success) {
+        throw new Error(data.message);
+      }
+      setPosts(data.posts || []);
+    } catch (error) {
+      setError(error.message);
+    } 
+  };
+
+  fetchPosts();
+}, [])
+
+  
+  const handleDelete = async (postId) => {
+    setError(null);
+    try {
+      const response = await fetch(
+        `${import.meta.env.VITE_BACKEND_URL}/api/post/delete/${postId}`,
         {
           method: "DELETE",
           credentials: "include",
@@ -32,75 +53,62 @@ const PostTable = () => {
       );
       const data = await response.json();
       if (!data.success) {
-        return seterror(data.message);
+        return setError(data.message);
       }
-      setposts((prevPosts) => prevPosts.filter((post) => post._id !== postid));
+      setPosts((prevPosts) => prevPosts.filter((post) => post._id !== postId));
     } catch (error) {
-      seterror(error.message);
+      setError(error.message);
     }
   };
 
   return (
-    <div className="max-w-full min-w-[500px] rounded border h-full mx-auto  px-4 ">
-      {error && (
-        <div className="text-center text-lg font-semibold">{error}</div>
-      )}
-      <div className="overflow-x-auto">
-        <table className="min-w-full  divide-gray-200  shadow-lg rounded-lg">
-          <thead className="border-b">
-            <tr>
-              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                Title
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                Description
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                Created/Updated At
-              </th>
-              <th className="px-6 py-3 text-left text-xs font-medium  uppercase tracking-wider">
-                Actions
-              </th>
-            </tr>
-          </thead>
-          <tbody className="">
-            {posts?.map((post, index) => (
-              <tr key={index} className="border-b relative">
-                <td className="px-6 py-4 whitespace-nowrap text-sm font-medium ">
-                  {post?.title}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                  {post.description.length > 86
-                    ? post?.description.slice(0, 85) + "..."
+    <div className="bg-gray-900 min-h-screen">
+      <div className="container mx-auto px-4 py-8">
+        {error && (
+          <div className="text-center text-lg font-semibold text-red-400 mb-4">{error}</div>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {posts?.map((post) => (
+            <div key={post._id} className="bg-gray-800 rounded-lg shadow-lg overflow-hidden border border-gray-700">
+              <div className="relative h-48 w-full">
+                <img
+                  src={post.image || "/placeholder.svg"}
+                  alt={post.title}
+                  className="w-full h-full object-cover"
+                />
+              </div>
+              <div className="p-4">
+                <h2 className="text-xl font-bold mb-2 text-white">{post.title}</h2>
+                <p className="text-sm text-gray-300 mb-2">
+                  {post.description.length > 100
+                    ? post.description.slice(0, 100) + "..."
                     : post.description}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                  {formatDate(post?.updatedAt)}
-                </td>
-                <td className="px-6 py-4 whitespace-nowrap text-sm ">
-                  <div className="w-full flex justify-between items-center">
-                    <div
-                      className="cursor-pointer"
-                      onClick={() => {
-                        handleDelete(post._id);
-                      }}
-                    >
-                      <AiOutlineDelete size={20} />
-                    </div>
-                    <div className="cursor-pointer">
-                      <Link to={`/update-post/${post.slug}`}>
-                        <AiOutlineEdit size={20} />
-                      </Link>
-                    </div>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+                </p>
+                <p className="text-xs text-gray-400">{formatDate(post.updatedAt)}</p>
+              </div>
+              <div className="flex justify-between p-4 border-t border-gray-700">
+                <button
+                  onClick={() => handleDelete(post._id)}
+                  className="text-red-400 hover:text-red-300 transition-colors duration-200"
+                  aria-label="Delete post"
+                >
+                  <AiOutlineDelete size={20} />
+                </button>
+                <Link
+                  to={`/update-post/${post.slug}`}
+                  className="text-blue-400 hover:text-blue-300 transition-colors duration-200"
+                  aria-label="Edit post"
+                >
+                  <AiOutlineEdit size={20} />
+                </Link>
+              </div>
+            </div>
+          ))}
+        </div>
       </div>
     </div>
   );
 };
 
-export default PostTable;
+export default PostCards;
+
