@@ -98,7 +98,7 @@ function Navbar() {
           <div className="flex items-center">
             <Link to="/" className="flex items-center space-x-2">
               <span className="font-bold text-xl">
-                <span className="bg-gradient-to-tl from-blue-800 to-pink-800 text-transparent bg-clip-text">
+                <span className="bg-gradient-to-tl from-blue-400 to-pink-400 text-transparent bg-clip-text">
                   &lt;Farhan's /&gt;
                 </span>{" "}
                 Blog

@@ -20,7 +20,7 @@ function Post({ post, deletePost }) {
         </span>
       )}
       <div className="flex justify-center h-[240px] w-full md:w-[300px] items-start">
-        <img
+        <StreamingImage
           src={post.image}
           width={165}
           className=" w-full h-full rounded object-contain"
@@ -37,7 +37,7 @@ function Post({ post, deletePost }) {
           </div>
         </div>
         <div className="flex items-center">
-          <StreamingImage
+          <img
             className="w-10 h-10 rounded-full mr-4"
             src={post.user.image || "noavatar.png"}
             alt="User avatar"

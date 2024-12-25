@@ -101,7 +101,7 @@ function UpdateUser() {
     );
   };
   return (
-    <div className="m-2 w-1/2 mx-auto rounded  min-h-1.5 ">
+    <div className="m-2 md:w-1/2 w-full mx-auto rounded  min-h-1.5 ">
       <h1 className="text-center text-2xl font-bold">Update User</h1>
 
       <form
