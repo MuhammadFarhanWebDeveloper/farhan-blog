@@ -225,7 +225,7 @@ auth.put(
         .json({ success: false, message: "BKL use valid credentials," });
     }
     try {
-      const { username,description, image } = req.body;
+      const { username, description, image } = req.body;
       if (req.user !== req.params.id) {
         return res.status(400).json({
           success: false,
@@ -283,7 +283,14 @@ auth.post("/getone", isUserLoggedIn, async (req, res) => {
 
 auth.post("/logout", isUserLoggedIn, async (req, res) => {
   try {
-    res.clearCookie("authtoken").json({ success: true });
+    res
+      .clearCookie("authtoken", {
+        httpOnly: true,
+        secure: process.env.NODE_ENV === "production",
+        sameSite: "none", // Match the sameSite value used during cookie setting
+        path: "/", // Ensure the path matches the one used when setting the cookie
+      })
+      .json({ success: true });
   } catch (error) {
     console.log(error.message);
     res.status(500).json({ success: false, message: "Internal server error" });
