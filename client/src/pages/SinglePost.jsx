@@ -72,7 +72,7 @@ function SinglePost() {
   return (
     <div className="max-w-3xl mx-auto px-4 py-8">
       <h1 className="text-4xl font-bold text-center mb-8">{post.title}</h1>
-      <div className="aspect-w-16 aspect-h-9 min-h-[400px] border mb-8 rounded-lg overflow-hidden">
+      <div className="aspect-w-16 aspect-h-9 min-h-[400px]  mb-8 rounded-lg overflow-hidden">
         <StreamingImage
           src={post.image}
           alt="An image related to this post"
