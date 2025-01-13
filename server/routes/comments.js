@@ -34,7 +34,7 @@ comment.post("/create/:id", isUserLoggedIn, async (req, res) => {
     const populatedComment = await addComment.populate({
       path: "user",
       select: "username image useremail",
-    }).execPopulate();
+    });
     res.status(200).json({ success: true, comment: populatedComment });
   } catch (error) {
     console.log(error.message);
