@@ -1,12 +1,13 @@
 import React, { useState, useEffect, useRef } from "react";
 import { Link, useLocation, useNavigate } from "react-router-dom";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import {
   AiOutlineMenu,
   AiOutlineClose,
   AiOutlineLogout,
   AiOutlineUser,
 } from "react-icons/ai";
+import { signOut } from "../../redux/user/userSlice";
 
 function Navbar() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -16,7 +17,7 @@ function Navbar() {
   const location = useLocation();
   const userMenuRef = useRef(null);
   const mobileMenuRef = useRef(null);
-
+  const dispatch = useDispatch()
   const logout = async () => {
     try {
       const response = await fetch(
@@ -30,6 +31,8 @@ function Navbar() {
       if (data.success) {
         console.log("Logged out successfully");
         navigate("/login");
+        dispatch(signOut())
+        console.log("user", currentUser)
       }
     } catch (error) {
       console.error("Logout failed:", error);

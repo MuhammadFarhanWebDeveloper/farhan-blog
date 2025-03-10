@@ -9,14 +9,13 @@ comment.post("/create/:id", isUserLoggedIn, async (req, res) => {
     const postid = req.params.id;
     const userid = req.user;
 
-    
     if (!comment || !comment.replaceAll(" ", "")) {
       return res
         .status(400)
         .json({ success: false, message: "Invalid comment" });
     }
 
-    const post = await Post.findById(postid)
+    const post = await Post.findById(postid);
     if (!post) {
       return res
         .status(404)
@@ -24,13 +23,19 @@ comment.post("/create/:id", isUserLoggedIn, async (req, res) => {
     }
 
     const addComment = await Comment.create({
-      post:postid,
-      user:userid,
+      post: postid,
+      user: userid,
       comment,
     });
-    post.comments.push(addComment._id)
-    await post.save()
-    res.status(200).json({ success: true, comment: addComment });
+
+    post.comments.push(addComment._id);
+    await post.save();
+
+    const populatedComment = await addComment.populate({
+      path: "user",
+      select: "username image useremail",
+    });
+    res.status(200).json({ success: true, comment: populatedComment });
   } catch (error) {
     console.log(error.message);
     res
@@ -52,8 +57,8 @@ comment.delete("/delete/:id", isUserLoggedIn, async (req, res) => {
         .status(404)
         .json({ success: false, message: "Comment not found " });
     }
-    const post = await Post.findById(comment.post)
-    
+    const post = await Post.findById(comment.post);
+
     if (!isAdmin && comment.user != userid) {
       return res.status(401).json({
         success: false,
@@ -66,10 +71,8 @@ comment.delete("/delete/:id", isUserLoggedIn, async (req, res) => {
 
     // Save the updated Post document
     await post.save();
-    
-    const deletedComment = await Comment.findByIdAndDelete(id);
 
-    
+    const deletedComment = await Comment.findByIdAndDelete(id);
 
     res.status(200).json({ success: true, comment: deletedComment });
   } catch (error) {
