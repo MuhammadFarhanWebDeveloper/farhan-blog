@@ -129,7 +129,7 @@ post.delete("/delete/:id", isUserLoggedIn, async (req, res) => {
       });
     }
     const deletepost = await Post.findByIdAndDelete(post.id);
-    res.status(200).json({ success: true, deletedpost: deletepost });
+    res.status(200).json({ success: true, post: deletepost });
   } catch (error) {}
 });
 

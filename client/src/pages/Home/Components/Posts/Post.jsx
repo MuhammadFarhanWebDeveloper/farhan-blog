@@ -6,10 +6,9 @@ import StreamingImage from "../../../../components/StreamingImage";
 
 function Post({ post, deletePost }) {
   const { currentUser } = useSelector((state) => state.user);
-
   return (
     <div className="relative md:w-[90%] w-[100%] flex border  flex-col md:flex-row p-1 rounded">
-      {post.userid == currentUser?._id && (
+      {post.user._id == currentUser?._id && (
         <span
           onClick={() => {
             deletePost(post._id);

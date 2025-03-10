@@ -36,7 +36,7 @@ auth.post(
         res
           .cookie("authtoken", authtoken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/",
 
@@ -63,7 +63,7 @@ auth.post(
         res
           .cookie("authtoken", authtoken, {
             httpOnly: true,
-            secure: process.env.NODE_ENV === "production",
+            secure: true,
             maxAge: 7 * 24 * 60 * 60 * 1000,
             path: "/",
 
@@ -134,7 +134,7 @@ auth.post(
       res
         .cookie("authtoken", authtoken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           maxAge: 7 * 24 * 60 * 60 * 1000,
           path: "/",
 
@@ -188,7 +188,7 @@ auth.post(
       res
         .cookie("authtoken", authtoken, {
           httpOnly: true,
-          secure: process.env.NODE_ENV === "production",
+          secure: true,
           maxAge: 7 * 24 * 60 * 60 * 1000,
           path: "/",
 
