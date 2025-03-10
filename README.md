@@ -19,7 +19,7 @@ Users can create and publish posts by providing:
 - **Comments**: Enable users to comment on posts for meaningful discussions.
 
 - Responsive UI with Tailwind CSS
-- Image upload support with Cloudinary
+- Image upload support with Firebase file storage
 
 ## Project Structure
 ```
